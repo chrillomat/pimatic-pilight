@@ -147,7 +147,7 @@ module.exports = (env) ->
         connectDirectly()
 
     sendWelcome: ->
-      @send { message: "client gui" }
+      @send { message: '{"action":"identify","options":{"receiver":1}}\n' }
 
     send: (jsonMsg) ->
       env.logger.debug("pilight send: ", JSON.stringify(jsonMsg, null, " ")) if @debug
@@ -160,8 +160,8 @@ module.exports = (env) ->
     onReceive: (jsonMsg) ->
       env.logger.debug("pilight received: ", JSON.stringify(jsonMsg, null, " ")) if @debug
       switch 
-        when jsonMsg.message is "accept client"
-          @send { message: "request config" }
+        when jsonMsg.message is '{"status":"success"}'
+          @send { message: '{"action": "request config"}' }
         when jsonMsg.config?
           @emit "config", jsonMsg
         when jsonMsg.origin?
